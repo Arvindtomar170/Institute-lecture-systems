@@ -1,0 +1,60 @@
+{% extends './base.html' %}
+{% block content %}
+<style>
+    table{
+    position: absolute;
+    left: 10px;
+    top: 100px;
+    width: 80vw;
+    font-size: small;
+}
+</style>
+  <form method="POST">
+      <h4>Enter Details</h4>
+      <input type="text" name="semester" placeholder="semester"required ><br>
+      <input type="text" name="year" placeholder="year"required  ><br>
+      <input type="submit"font-size="20px" value="submit" required /><br>
+      <input type="reset"font-size="20px"/><br/><br>
+    </form>
+<h3>Details of the couses offered in a particular semester of a particular year</h3>
+<table>
+    <tr>
+        <th>RECORD ID</th>
+        <th>TOTAL STUDENT</th>
+        <th>COURSE ID</th>
+        <th>FACULTY ID</th>
+        <th>MON TIME</th>
+        <th>MON L-HALL</th>
+        <th>TUE TIME</th>
+        <th>TUE L-HALL</th>
+        <th>WED TIME</th>
+        <th>WED L-HALL</th>
+        <th>THU TIME</th>
+        <th>THU L-HALL</th>
+        <th>FRI TIME</th>
+        <th>FRI L-HALL</th>
+        <th>SAT TIME</th>
+        <th>SAT L-HALL</th>
+    </tr>
+      {% for x in msg %}
+     <tr>
+        <td >{{x.0}}</td>
+        <td >{{x.3}}</td>
+        <td >{{x.4}}</td>
+        <td >{{x.5}}</td>
+        <td >{{x.6}}</td>
+        <td >{{x.7}}</td>
+        <td >{{x.8}}</td>
+        <td >{{x.9}}</td>
+        <td >{{x.10}}</td>
+        <td >{{x.11}}</td>
+        <td >{{x.12}}</td>
+        <td >{{x.13}}</td>
+        <td >{{x.14}}</td>
+        <td >{{x.15}}</td>
+        <td >{{x.16}}</td>
+        <td >{{x.17}}</td>
+     </tr>
+      {% endfor %}
+</table>
+{% endblock content %}

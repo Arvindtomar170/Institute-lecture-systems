@@ -1,0 +1,164 @@
+/*sql queries 
+1.create database name "info";
+2.create table "Department" with attributes 
+				1.Dept_id  primary key;
+				2.Dept_name;
+		insert some data inside "Depatment Table";
+
+3.create table "courses" with attributes 
+                1.courses_id  primary key
+                2.courses_name
+                3.Dept_id foregin key refrencing Department table
+        insert some into course table
+
+4.create table "faculty" with attributes
+                1.Facullty_id varchar(30) primary key,
+                2.faculty_name varchar(50), 
+                3.Phone_no varchar(15),
+                4.Dept_id varchar(20), foregin key references Department(Dept_id)
+        insert some data into faculty table 
+
+
+5.create table "recods" with attributes 
+               1. record_id int primary key auto_increment,
+               2. year int,
+               3. semester varchar(20),
+               4. no_of_student int,
+               5. course_id varchar(20), foreign key references courses(course_id));
+               6. faculty_id varchar(30), foregin key references faculty(faculty_id),
+               7. mon_timing varchar(20),
+               8. mon_lec_hall varchar(10),
+               9. tue_lec_hall varchar(10),
+               10. wed_timing varchar(20)
+               11. wed_lec_hall varchar(10),
+               12. thu_timing varchar(20),
+               13. thu_lec_hall varchar(10),
+               14. fri_timing varchar(20),
+               15. fri_lec_hall varchar(10),
+               16. sat_timing varchar(20),
+               17. sat_lec_hall varchar(10),
+
+        Add some constraint to avoid clashes of lecutre hall and timing 
+        insert data into recods table
+*/
+
+
+
+/*------------------------------------------- first sql query----------------------------------------*/
+create database info;
+use info;
+
+
+
+/* ------------------------------------------second sql query---------------------------------------*/
+create table Department(
+        Dept_id varchar(20) primary key,
+        Dept_name varchar(50)
+    );
+insert into department values
+		("CSE","computer science and engineering"),
+        ("MA","Mathematics")
+        ,("PH","Phisics"),
+        ("CH","Chemistry"),
+        ("ME" ,"Mechenical engineering"),
+        ("EE","Electrical Engineering");
+
+
+
+/*------------------------------------------ third sql query------------------------------------ */
+create table courses(
+        course_id varchar(10) primary key,
+        course_name varchar(50),
+        Dept_id varchar(20), 
+        foreign key (Dept_id) references Department(Dept_id)
+    ); 
+insert into courses values
+        ("CS 257","databases and imformation techenology","CSE"),
+        ("CS 207","Data Structure","CSE"),
+        ("CS 201","discreate mathematics","CSE");
+
+
+
+/* --------------------------------------- fouth query---------------------------------------------*/
+create table faculty(
+        faculty_id varchar(30) primary key,
+        faculty_name varchar(50), 
+        Phone_no varchar(15),
+        Dept_id varchar(20),
+        foreign key(Dept_id) references Department(Dept_id)
+    );
+insert into faculty values  
+        ("1","x","3763892834","CSE"),
+        ("2","y","384793894","CSE"),
+        ("3","z","47938493903","ME"),
+        ("4","a","873498759","MA"),
+        ("5","b","73463988","CH");
+
+
+/*-----------------------------------------fifth query----------------------------------------------*/
+create table records(
+        record_id int primary key auto_increment,
+        year int,
+        semester varchar(20),
+        no_of_student int,
+        course_id varchar(20),
+        faculty_id varchar(30),
+        mon_timing varchar(20),
+        mon_lec_hall varchar(10),
+        tue_timing varchar(20),
+        tue_lec_hall varchar(10),
+        wed_timing varchar(20),
+        wed_lec_hall varchar(10),
+        thu_timing varchar(20),
+        thu_lec_hall varchar(10),
+        fri_timing varchar(20),
+        fri_lec_hall varchar(10),
+        sat_timing varchar(20),
+        sat_lec_hall varchar(10),
+        foreign key (faculty_id) references faculty(faculty_id),
+        foreign key (course_id) references courses(course_id)
+    );
+/*--------- adding constraint to avoid classes of timing /lecutre hall ---------*/
+alter table  records
+add constraint monday_timing_lecture_hall unique key(mon_timing,mon_lec_hall,year,semester),
+add constraint tuesday_timing_lecture_hall unique key(tue_timing,tue_lec_hall,year,semester),
+add constraint wednesday_timing_lecture_hall unique key(wed_timing,wed_lec_hall,year,semester),
+add constraint thusday_timing_lecture_hall unique key(thu_timing,thu_lec_hall,year,semester),
+add constraint friday_timing_lecture_hall unique key(fri_timing,fri_lec_hall,year,semester),
+add constraint saturday_timing_lecture_hall unique key(sat_timing,sat_lec_hall,year,semester);
+
+/* --------adding constraint to avoid multiple classes of single faculty at same time---------*/
+alter table records
+add constraint monday_faculty_timing unique key(mon_timing,faculty_id,year,semester),
+add constraint tuesday_faculty_timing unique key(tue_timing,faculty_id,year,semester),
+add constraint wednesday_faculty_timing unique key(wed_timing,faculty_id,year,semester),
+add constraint thusday_faculty_timing unique key(thu_timing,faculty_id,year,semester),
+add constraint friday_faculty_timing unique key(fri_timing,faculty_id,year,semester),
+add constraint saturday_faculty_timing unique key(sat_timing,faculty_id,year,semester);
+
+
+insert into records values
+    (default,2021,"spring",80,"CS 201","1","10:30 AM-11:30 AM","LH 03",null,null,null,null,null,null,null,null,null,null),
+    (default,2021,"spring",80,"CS 201","1",null,null,"10:30 AM-11:30 AM","LH 03",null,null,null,null,null,null,null,null),
+    (default,2021,"spring",80,"CS 257","2",null,null,"10:30 AM-11:30 AM","LH 04",null,null,null,null,null,null,null,null);
+
+    
+
+
+/*--------------------------------------------------------Assignment Quetions-----------------------------------------------------------------------------*/
+
+
+/*Q1----- find the course tougth by prof. x in the period of......*/
+select distinct course_id from records where faculty_id in (select faculty_id from faculty where Dept_id="CSE") and (year<=2021 and year>=2011);
+
+/*Q2----- differnt courses tougth by prof. x of dept. y */
+select distinct course_id from records where faculty_id ="1";
+
+/*Q3----- select all the courses offer by dept. y in the fall of year .....*/
+select distinct course_id from records where faculty_id in (select faculty_id from faculty where Dept_id="CSE") and (year>2010 and year<2022);
+
+/*Q4----- find all the faculty who has tougth course Z of department y */
+select distinct faculty_id from records where course_id="CS 201" and (faculty_id in (select faculty_id from faculty where Dept_id="CSE"));
+
+/*Q5------all the course offer in spring  2021 */
+select * from records where semester="spring" and year=2021;

@@ -1,0 +1,20 @@
+{% extends './base.html' %}
+{% block content %}
+  <form method="POST">
+      <h3>ENTER DETAILS</h3>
+     <input type="text" name="faculty_id" placeholder="Professor ID"required><br>
+     <input type="text" name="Dept_id" placeholder="Department Id" required ><br>
+     <input type="text" name="start_year" placeholder="start year" ><br>
+     <input type="text" name="end_year" placeholder="end year" ><br>
+ <input type="submit"font-size="20px" value="submit" /><br>
+ <input type="reset"font-size="20px"/><br/><br>
+</form>
+<h4>List of courses taugth by prof. X of Department Y fraom year A to B </h4>
+<table>
+      {% for x in msg %}
+     <tr>
+        <td class="code" >{{x.0}}</td><br>
+     </tr>
+      {% endfor %}
+</table>
+{% endblock content %}
